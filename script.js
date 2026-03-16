@@ -79,7 +79,7 @@ let tasks_list = [
     task_desc: "Review PR #42 for security issues.",
     task_priority: "medium",
     task_status: "in-progress",
-    date: "2026-03-11",
+    date: "2026-03-19",
   },
   {
     task_id: 11,
@@ -87,7 +87,7 @@ let tasks_list = [
     task_desc: "Pair programming session + codebase walkthrough.",
     task_priority: "low",
     task_status: "to-do",
-    date: "2026-03-14",
+    date: "2026-03-20",
   },
   {
     task_id: 12,
@@ -95,7 +95,7 @@ let tasks_list = [
     task_desc: "Document all REST endpoints with examples.",
     task_priority: "low",
     task_status: "to-do",
-    date: "2026-03-15",
+    date: "2026-03-28",
   },
 ];
 
@@ -118,7 +118,7 @@ function tab_lists_update() {
   stats_update();
 }
 
-// ------------------------------------------------------------ Statistics Cards
+// ------------------------------------------------------------ Statistics Function
 function stats_update() {
   total_tasks = document.getElementById("total-tasks");
   total_tasks.textContent = tasks_list.length;
@@ -128,6 +128,42 @@ function stats_update() {
 
   completed_tasks = document.getElementById("completed-tasks");
   completed_tasks.textContent = completed_task_list.length;
+
+  // Calculate amount of dates from last week and due dates
+  const today = new Date();
+  const lastWeek = new Date();
+  const thisWeek = new Date();
+  lastWeek.setDate(today.getDate() - 7);
+  thisWeek.setDate(today.getDate() + 7);
+
+  const lastWeek_count = tasks_list.filter((task) => {
+    const taskDate = new Date(task.date);
+    return taskDate >= lastWeek && taskDate <= today;
+  }).length;
+
+  const thisWeek_count = tasks_list.filter((task) => {
+    const taskDate = new Date(task.date);
+    if (task.task_status === "in-progress") return taskDate >= today && taskDate <= thisWeek;
+  }).length;
+
+  const overdue = tasks_list.filter((task) => {
+    const taskDate = new Date(task.date);
+    if (task.task_status === "in-progress") return taskDate <= today;
+  }).length;
+
+  const last_week_tasks = document.getElementById("last-week-tasks");
+  last_week_tasks.textContent = "+" + lastWeek_count;
+
+  const this_week_tasks = document.getElementById("this-week-tasks");
+  this_week_tasks.textContent = thisWeek_count;
+
+  const overdue_tasks = document.getElementById("overdue-tasks");
+  overdue_tasks.textContent = overdue;
+
+  // Calculate completion rate
+  const completion_rate = (completed_task_list.length / tasks_list.length) * 100;
+  const completion = document.getElementById("completion-rate");
+  completion.textContent = Math.round(completion_rate);
 }
 
 // -------------------------------------------------------------------- Functions
