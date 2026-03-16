@@ -1,6 +1,6 @@
 "use strict";
 
-const tasks_list = [
+let tasks_list = [
   {
     task_id: 1,
     task_name: "Write unit tests",
@@ -99,6 +99,37 @@ const tasks_list = [
   },
 ];
 
+let to_do_task_list = [];
+let in_progress_task_list = [];
+let completed_task_list = [];
+
+let total_tasks, in_progress_tasks, completed_tasks;
+
+function tab_lists_update() {
+  to_do_task_list = tasks_list.filter((task) => {
+    return task.task_status === "to-do";
+  });
+  in_progress_task_list = tasks_list.filter((task) => {
+    return task.task_status === "in-progress";
+  });
+  completed_task_list = tasks_list.filter((task) => {
+    return task.task_status === "completed";
+  });
+  stats_update();
+}
+
+// ------------------------------------------------------------ Statistics Cards
+function stats_update() {
+  total_tasks = document.getElementById("total-tasks");
+  total_tasks.textContent = tasks_list.length;
+
+  in_progress_tasks = document.getElementById("in-progress-tasks");
+  in_progress_tasks.textContent = in_progress_task_list.length;
+
+  completed_tasks = document.getElementById("completed-tasks");
+  completed_tasks.textContent = completed_task_list.length;
+}
+
 // -------------------------------------------------------------------- Functions
 
 // task card status functions
@@ -192,7 +223,7 @@ function task_card(tasks_list, task_container) {
                       </div>
                     </div>
                   </div>
-                  <div class="delete-task text-text-500 hover:text-rose-500 hover:bg-rose-500/10 opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
+                  <div id="delete-${task.task_id}" class="delete-task text-text-500 hover:text-rose-500 hover:bg-rose-500/10 opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                       <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                     </svg>
@@ -200,11 +231,108 @@ function task_card(tasks_list, task_container) {
                 </div>
                 <div class="flex justify-between items-center border-t border-background-200/50 w-full pt-4 mt-4">
                   <p id="date" class="text-text-500 text-[11px]">${formatted_date}</p>
-                  <button id="btn-status-switch"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span></button>
+                  <button id="btn-${task.task_id}"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span></button>
                 </div>
               </article>
     `;
   }
+  task_card_features();
+}
+
+function task_card_features() {
+  const task_card_list = document.querySelectorAll(".task-card");
+  const tabs = document.querySelectorAll(".task-tab");
+
+  // implement status switch btn
+  task_card_list.forEach((card, i) => {
+    const btn_status_switch = card.querySelector("button");
+    const progress_badge = card.querySelector(".progress-badge");
+    const delete_task = card.querySelector(".delete-task");
+
+    // Delete btn toggle over mouse pointer hover
+    card.addEventListener("mouseover", () => {
+      delete_task.classList.replace("opacity-0", "opacity-100");
+    });
+    card.addEventListener("mouseout", () => {
+      delete_task.classList.replace("opacity-100", "opacity-0");
+    });
+
+    // Change status with btn click event
+    btn_status_switch.addEventListener("click", (e) => {
+      // Extract the unique task id of the clicked task
+      const btn_Id = e.currentTarget.id;
+      const task_Id = Number(btn_Id.split("-")[1]);
+      const task = tasks_list.find((t) => t.task_id === task_Id);
+
+      if (btn_status_switch.textContent.toLowerCase() === "undo") {
+        set_status_todo();
+        task.task_status = "to-do";
+        card.querySelector(".task-name").classList.remove("line-through");
+        card.querySelector(".task-name").classList.replace("text-text-500", "text-text-900");
+      } else if (btn_status_switch.textContent.toLowerCase() === "mark in progress") {
+        set_status_inprogress();
+        task.task_status = "in-progress";
+        card.querySelector(".task-name").classList.remove("line-through");
+        card.querySelector(".task-name").classList.replace("text-text-500", "text-text-900");
+      } else {
+        set_status_completed();
+        task.task_status = "completed";
+        card.querySelector(".task-name").classList.add("line-through");
+        card.querySelector(".task-name").classList.replace("text-text-900", "text-text-500");
+      }
+
+      progress_badge.innerHTML = `<p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>`;
+      btn_status_switch.innerHTML = `<span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span>`;
+
+      tab_lists_update();
+      if (!tabs[0]?.classList.contains("text-accent-500")) {
+        card.remove();
+      }
+    });
+
+    // Delete task with btn click event
+    delete_task.addEventListener("click", (e) => {
+      const btn_Id = e.currentTarget.id;
+      const task_Id = Number(btn_Id.split("-")[1]);
+
+      tasks_list = tasks_list.filter((task) => task.task_id != task_Id);
+      tab_lists_update();
+      card.remove();
+    });
+  });
+}
+
+function filter_tasks() {
+  task_card(tasks_list, task_container);
+  tab_lists_update();
+
+  const active_tab_classes = ["text-accent-500", "border-b-2", "border-accent-500"];
+  const inactive_tab_classes = ["text-text-400", "hover:text-text-500"];
+
+  task_tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      tab_lists_update();
+      // Remove active classes for every tab
+      task_tabs.forEach((t) => {
+        t.classList.remove(...active_tab_classes);
+        t.classList.add(...inactive_tab_classes);
+      });
+
+      // Add active classes to the clicked tab
+      tab.classList.add(...active_tab_classes);
+      tab.classList.remove(...inactive_tab_classes);
+
+      if (tab.textContent === "Completed") {
+        task_card(completed_task_list, task_container);
+      } else if (tab.textContent === "To Do") {
+        task_card(to_do_task_list, task_container);
+      } else if (tab.textContent === "In Progress") {
+        task_card(in_progress_task_list, task_container);
+      } else {
+        task_card(tasks_list, task_container);
+      }
+    });
+  });
 }
 
 // ------------------------------------------------------------------element selections
@@ -215,58 +343,15 @@ const dark_mode_svgs = dark_mode.querySelectorAll("svg");
 const light_mode_icon = dark_mode_svgs[0];
 const dark_mode_icon = dark_mode_svgs[1];
 
-// task card elements
+// task element selections
 const task_container = document.getElementById("task-container");
 
-// ------------------------------------------------------------------- Logic
+const task_tabs = document.querySelectorAll(".task-tab");
+
+// ------------------------------------------------------------------- Initialize
 
 // Initialize task container - important for filtering for tabs
-task_card(tasks_list, task_container);
-
-const task_card_list = document.querySelectorAll(".task-card");
-console.log(task_card_list);
-
-// implement status switch btn
-task_card_list.forEach((card, i) => {
-  const btn_status_switch = card.querySelector("button");
-  const progress_badge = card.querySelector(".progress-badge");
-  const delete_task = card.querySelector(".delete-task");
-
-  // Delete btn toggle over mouse pointer hover
-  card.addEventListener("mouseover", () => {
-    delete_task.classList.replace("opacity-0", "opacity-100");
-  });
-  card.addEventListener("mouseout", () => {
-    delete_task.classList.replace("opacity-100", "opacity-0");
-  });
-
-  // Change status with btn click event
-  btn_status_switch.addEventListener("click", () => {
-    if (btn_status_switch.textContent.toLowerCase() === "undo") {
-      set_status_todo();
-      card.querySelector(".task-name").classList.remove("line-through");
-      card.querySelector(".task-name").classList.replace("text-text-500", "text-text-900");
-    } else if (btn_status_switch.textContent.toLowerCase() === "mark in progress") {
-      set_status_inprogress();
-      card.querySelector(".task-name").classList.remove("line-through");
-      card.querySelector(".task-name").classList.replace("text-text-500", "text-text-900");
-    } else {
-      set_status_completed();
-      card.querySelector(".task-name").classList.add("line-through");
-      card.querySelector(".task-name").classList.replace("text-text-900", "text-text-500");
-    }
-    progress_badge.innerHTML = `<p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>`;
-    btn_status_switch.innerHTML = `<span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span>`;
-  });
-
-  // Delete task with btn click event
-  delete_task.addEventListener("click", () => {
-    tasks_list.splice(i, 1);
-    card.remove();
-  });
-});
-
-// ------------------------------------------------------------- Task Tabs
+filter_tasks();
 
 // ------------------------------------------------------------ dark mode toggle
 dark_mode.addEventListener("click", () => {
