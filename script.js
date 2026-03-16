@@ -1,10 +1,274 @@
-// javascript here
+"use strict";
 
+const tasks_list = [
+  {
+    task_id: 1,
+    task_name: "Write unit tests",
+    task_desc: "Cover auth and payment modules with tests.",
+    task_priority: "medium",
+    task_status: "completed",
+    date: "2026-03-02",
+  },
+  {
+    task_id: 2,
+    task_name: "Update dependencies",
+    task_desc: "Bump all packages to latest stable verisons.",
+    task_priority: "low",
+    task_status: "completed",
+    date: "2026-03-03",
+  },
+  {
+    task_id: 3,
+    task_name: "Implement dark mode",
+    task_desc: "Add theme toggle with CSS custom properties",
+    task_priority: "medium",
+    task_status: "completed",
+    date: "2026-03-04",
+  },
+  {
+    task_id: 4,
+    task_name: "Set up CI/CD pipeline",
+    task_desc: "Configure Github Actions for auto deploy.",
+    task_priority: "medium",
+    task_status: "completed",
+    date: "2026-03-05",
+  },
+  {
+    task_id: 5,
+    task_name: "Create user dashboard",
+    task_desc: "Build the analytics dashboard for end users.",
+    task_priority: "high",
+    task_status: "in-progress",
+    date: "2026-03-06",
+  },
+  {
+    task_id: 6,
+    task_name: "Performance audit",
+    task_desc: "Run Lighthouse and fix critical issues.",
+    task_priority: "medium",
+    task_status: "in-progress",
+    date: "2026-03-07",
+  },
+  {
+    task_id: 7,
+    task_name: "Fix login redirect bug",
+    task_desc: "Users are redirected to 404 after OAuth login.",
+    task_priority: "high",
+    task_status: "in-progress",
+    date: "2026-03-08",
+  },
+  {
+    task_id: 8,
+    task_name: "Database migration",
+    task_desc: "Migrate user table to new schema.",
+    task_priority: "high",
+    task_status: "to-do",
+    date: "2026-03-09",
+  },
+  {
+    task_id: 9,
+    task_name: "Design homepage wireframe",
+    task_desc: "Create low-fi wireframes for the new landing page.",
+    task_priority: "high",
+    task_status: "in-progress",
+    date: "2026-03-10",
+  },
+  {
+    task_id: 10,
+    task_name: "Code review: auth module",
+    task_desc: "Review PR #42 for security issues.",
+    task_priority: "medium",
+    task_status: "in-progress",
+    date: "2026-03-11",
+  },
+  {
+    task_id: 11,
+    task_name: "Onboard new developer",
+    task_desc: "Pair programming session + codebase walkthrough.",
+    task_priority: "low",
+    task_status: "to-do",
+    date: "2026-03-14",
+  },
+  {
+    task_id: 12,
+    task_name: "Write API documentation",
+    task_desc: "Document all REST endpoints with examples.",
+    task_priority: "low",
+    task_status: "to-do",
+    date: "2026-03-15",
+  },
+];
+
+// -------------------------------------------------------------------- Functions
+
+// task card status functions
+let status_text_color,
+  status_bg_color,
+  status_text,
+  status_btn = "";
+
+function set_status_todo() {
+  status_text_color = "text-text-500";
+  status_bg_color = "bg-background-50";
+  status_text = "To Do";
+  status_btn = "Mark In Progress";
+}
+
+function set_status_inprogress() {
+  status_text_color = "text-blue-500";
+  status_bg_color = "bg-blue-500/10";
+  status_text = "In Progress";
+  status_btn = "Mark Completed";
+}
+
+function set_status_completed() {
+  status_text_color = "text-green-500";
+  status_bg_color = "bg-green-500/10";
+  status_text = "Completed";
+  status_btn = "Undo";
+}
+
+// task card main function
+
+function task_card(tasks_list, task_container) {
+  task_container.innerHTML = "";
+  for (const task of tasks_list) {
+    // check task status
+    let status_complete_text_color = "text-text-900";
+    let status_complete_text_deco = "";
+
+    if (task.task_status.toLowerCase() === "to-do") {
+      set_status_todo();
+    } else if (task.task_status.toLowerCase() === "in-progress") {
+      set_status_inprogress();
+    } else {
+      set_status_completed();
+      status_complete_text_color = "text-text-500";
+      status_complete_text_deco = "line-through";
+    }
+
+    // check task priority
+    let priority_text_color,
+      priority_bg_color,
+      priority_ring_color,
+      priority_text = "";
+
+    if (task.task_priority.toLowerCase() === "low") {
+      priority_text_color = "text-green-500";
+      priority_bg_color = "bg-green-500/10";
+      priority_ring_color = "ring-green-200/80";
+      priority_text = "Low";
+    } else if (task.task_priority.toLowerCase() === "medium") {
+      priority_text_color = "text-amber-500";
+      priority_bg_color = "bg-amber-500/10";
+      priority_ring_color = "ring-amber-200/80";
+      priority_text = "Medium";
+    } else {
+      priority_text_color = "text-rose-500";
+      priority_bg_color = "bg-rose-500/10";
+      priority_ring_color = "ring-rose-200/80";
+      priority_text = "High";
+    }
+
+    //format date
+    const date_obj = new Date(task.date);
+    const formatted_date = date_obj.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+    task_container.innerHTML += `
+              <!-- Task card -->
+              <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start border border-background-200/50 rounded-xl p-4 hover:shadow-md transition-all duration-200">
+                <div class="flex w-full justify-between items-start">
+                  <div class="flex flex-col items-start gap-2">
+                    <p id="task-name" class="task-name ${status_complete_text_color} ${status_complete_text_deco} text-sm font-semibold">${task.task_name}</p>
+                    <p id="task-description" class="text-text-500 text-xs">${task.task_desc}</p>
+                    <div class="flex gap-2 justify-start items-center text-xs mt-1">
+                      <!-- Priority badge -->
+                      <div class="">
+                        <p class="text-[11px] font-medium tracking-wide ${priority_text_color} ${priority_bg_color} ring-1 ${priority_ring_color} py-0.5 px-2 rounded-full">${priority_text}</p>
+                      </div>
+                      <!-- Progress badge -->
+                      <div class="progress-badge">
+                        <p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="delete-task text-text-500 hover:text-rose-500 hover:bg-rose-500/10 opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="flex justify-between items-center border-t border-background-200/50 w-full pt-4 mt-4">
+                  <p id="date" class="text-text-500 text-[11px]">${formatted_date}</p>
+                  <button id="btn-status-switch"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span></button>
+                </div>
+              </article>
+    `;
+  }
+}
+
+// ------------------------------------------------------------------element selections
+
+// dark / light mode selections
 const dark_mode = document.getElementById("dark-mode-toggle");
 const dark_mode_svgs = dark_mode.querySelectorAll("svg");
 const light_mode_icon = dark_mode_svgs[0];
 const dark_mode_icon = dark_mode_svgs[1];
 
+// task card elements
+const task_container = document.getElementById("task-container");
+
+// ------------------------------------------------------------------- Logic
+
+// Initialize task container - important for filtering for tabs
+task_card(tasks_list, task_container);
+
+const task_card_list = document.querySelectorAll(".task-card");
+console.log(task_card_list);
+
+// implement status switch btn
+task_card_list.forEach((card, i) => {
+  const btn_status_switch = card.querySelector("button");
+  const progress_badge = card.querySelector(".progress-badge");
+  const delete_task = card.querySelector(".delete-task");
+
+  // Delete btn toggle over mouse pointer hover
+  card.addEventListener("mouseover", () => {
+    delete_task.classList.replace("opacity-0", "opacity-100");
+  });
+  card.addEventListener("mouseout", () => {
+    delete_task.classList.replace("opacity-100", "opacity-0");
+  });
+
+  // Change status with btn click event
+  btn_status_switch.addEventListener("click", () => {
+    if (btn_status_switch.textContent.toLowerCase() === "undo") {
+      set_status_todo();
+      card.querySelector(".task-name").classList.remove("line-through");
+      card.querySelector(".task-name").classList.replace("text-text-500", "text-text-900");
+    } else if (btn_status_switch.textContent.toLowerCase() === "mark in progress") {
+      set_status_inprogress();
+      card.querySelector(".task-name").classList.remove("line-through");
+      card.querySelector(".task-name").classList.replace("text-text-500", "text-text-900");
+    } else {
+      set_status_completed();
+      card.querySelector(".task-name").classList.add("line-through");
+      card.querySelector(".task-name").classList.replace("text-text-900", "text-text-500");
+    }
+    progress_badge.innerHTML = `<p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>`;
+    btn_status_switch.innerHTML = `<span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span>`;
+  });
+
+  // Delete task with btn click event
+  delete_task.addEventListener("click", () => {
+    tasks_list.splice(i, 1);
+    card.remove();
+  });
+});
+
+// ------------------------------------------------------------- Task Tabs
+
+// ------------------------------------------------------------ dark mode toggle
 dark_mode.addEventListener("click", () => {
   document.documentElement.classList.toggle("dark");
   [light_mode_icon, dark_mode_icon].forEach((svg) => {
