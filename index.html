@@ -279,7 +279,7 @@
             </button>
           </nav>
           <!-- User profile -->
-          <div class="border-t-1 border-background-200/50 p-3 relative">
+          <div id="user-profile" class="border-t-1 border-background-200/50 p-3 relative">
             <div class="flex justify-start items-center hover:bg-background-200/30 text-text-900 rounded-lg gap-2 px-3 py-2 cursor-pointer">
               <div class="w-8 h-8 rounded-full overflow-hidden">
                 <img src="https://cdn.auth0.com/avatars/aj.png" alt="profile picture" />
@@ -291,7 +291,7 @@
             </div>
 
             <!-- User profile: Options menu -->
-            <div class="flex flex-col justify-start items-start bg-background-100/50 dark:bg-background-200/50 mt-1 rounded-lg absolute bottom-full mb-2 left-3 right-2 px-1.5 py-1.5 gap-1.5 shadow-lg z-[80]">
+            <div id="user-profile-options" class="flex flex-col justify-start items-start bg-background-100/50 dark:bg-background-200/50 mt-1 rounded-lg absolute bottom-full mb-2 left-3 right-2 px-1.5 py-1.5 gap-1.5 shadow-lg z-[80] hidden">
               <!-- Btn: Profile -->
               <button id="btn-profile" class="flex justify-start items-center gap-3 px-3 py-2 rounded-lg hover:bg-background-200/30 dark:hover:bg-background-300/60 text-text-500 hover:text-text-900 cursor-pointer w-full">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
@@ -425,14 +425,15 @@
           </div>
 
           <!-- Form: Add new task -->
-          <!-- <div id="new-task-form" class="fixed backdrop-blur-sm bg-background-900/50 dark:bg-background-100/50 inset-0 flex items-center justify-center pointer-events-auto opacity-100 transition-opacity duration-300 ease-in-out z-[80]">
+          <div id="new-task-form" class="fixed backdrop-blur-sm bg-background-900/50 dark:bg-background-100/50 inset-0 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300 ease-in-out z-[80]">
             <form action="" class="flex flex-col gap-4 w-100 m-4 bg-slate-50 dark:bg-background-50 shadow-lg p-4 rounded-xl pointer-events-auto">
               <div class="flex justify-between items-start">
                 <div class="flex flex-col items-start justify-center gap-1">
                   <h3 class="text-xl text-text-900">Create New Task</h3>
                   <p class="text-sm text-text-500">Fill in the details below to add a task.</p>
                 </div>
-                <div class="text-text-500 p-1 rounded-lg hover:bg-secondary-100">
+                <div id="close-task-form" class="text-text-500 p-1 rounded-lg hover:bg-secondary-100 cursor-pointer">
+                  <!-- Icon: Close -->
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                   </svg>
@@ -473,7 +474,7 @@
                 <button id="new-task-submit" type="submit" class="flex justify-center items-center gap-2 px-4 py-2 text-slate-50 dark:text-slate-50 text-sm font-semibold rounded-md bg-background-500 hover:bg-background-600 cursor-pointer">Create Task</button>
               </div>
             </form>
-          </div> -->
+          </div>
 
           <!-- Mobile Btn: Add Task -->
           <button id="btn-mobile-add-task" class="md:hidden fixed bottom-32 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-accent-500 hover:bg-accent-600 text-text-900 dark:text-text-100 shadow-xl transition-transform active:scale-95">

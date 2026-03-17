@@ -123,6 +123,16 @@ const mobile_menu = document.getElementById("mobile-sidebar");
 const hamburger_toggle = document.getElementById("sidebar-toggle");
 const overlay = document.getElementById("overlay");
 
+// user profile elements selections
+const user_profile = document.getElementById("user-profile");
+const user_profile_options = document.getElementById("user-profile-options");
+
+// add new task elements selections
+const new_task_form = document.getElementById("new-task-form");
+const btn_add_task = document.getElementById("btn-add-task");
+const btn_mobile_add_task = document.getElementById("btn-mobile-add-task");
+const btn_close_form = document.getElementById("close-task-form");
+
 //------------------------------------------------------------------ Variable declarations
 
 let to_do_task_list = [];
@@ -494,6 +504,35 @@ hamburger_toggle.addEventListener("click", () => {
   }
   mobile_menu.classList.toggle("hidden");
 });
+
+// ------------------------------------------------------------ User Profile Sidebar Menu toggle
+
+user_profile.addEventListener("click", () => {
+  user_profile_options.classList.toggle("hidden");
+});
+
+// ------------------------------------------------------------ Add New Task Menu toggle
+function toggle_new_task_form(button) {
+  button.addEventListener("click", () => {
+    const isHidden = new_task_form.classList.contains("opacity-0");
+
+    if (!isHidden) {
+      new_task_form.classList.replace("opacity-100", "opacity-0");
+      new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
+    } else {
+      new_task_form.classList.replace("opacity-0", "opacity-100");
+      new_task_form.classList.replace("pointer-events-none", "pointer-events-auto");
+    }
+  });
+}
+
+btn_close_form.addEventListener("click", () => {
+  new_task_form.classList.replace("opacity-100", "opacity-0");
+  new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
+});
+
+toggle_new_task_form(btn_add_task);
+toggle_new_task_form(btn_mobile_add_task);
 
 // ------------------------------------------------------------ Sort function
 
