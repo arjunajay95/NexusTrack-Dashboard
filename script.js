@@ -132,6 +132,10 @@ const new_task_form = document.getElementById("new-task-form");
 const btn_add_task = document.getElementById("btn-add-task");
 const btn_mobile_add_task = document.getElementById("btn-mobile-add-task");
 const btn_close_form = document.getElementById("close-task-form");
+const btn_new_task_submit = document.getElementById("new-task-submit");
+const btn_new_task_cancel = document.getElementById("new-task-cancel");
+const taskForm = document.querySelector("form");
+const success_msg = document.getElementById("success-msg");
 
 //------------------------------------------------------------------ Variable declarations
 
@@ -475,6 +479,37 @@ function sort_tasks(arr, criteria) {
   return sorted_arr;
 }
 
+// Toggle Add-New-Task form upon button click function
+function toggle_new_task_form(button) {
+  button.addEventListener("click", () => {
+    const isHidden = new_task_form.classList.contains("opacity-0");
+
+    if (!isHidden) {
+      new_task_form.classList.replace("opacity-100", "opacity-0");
+      new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
+      taskForm.classList.replace("pointer-events-auto", "pointer-events-none");
+    } else {
+      new_task_form.classList.replace("opacity-0", "opacity-100");
+      new_task_form.classList.replace("pointer-events-none", "pointer-events-auto");
+      taskForm.classList.replace("pointer-events-none", "pointer-events-auto");
+    }
+  });
+}
+
+// Close add new task form function
+function close_form() {
+  new_task_form.classList.replace("opacity-100", "opacity-0");
+  new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
+  taskForm.classList.replace("pointer-events-auto", "pointer-events-none");
+
+  // Reset success message state for next time
+  success_msg.classList.add("max-h-0", "opacity-0");
+  success_msg.classList.remove("max-h-20", "opacity-100", "mt-2");
+
+  // Reset form for the next time
+  taskForm.reset();
+}
+
 // ------------------------------------------------------------------- Initialize
 
 // Initialize task container - important for filtering for tabs
@@ -512,27 +547,14 @@ user_profile.addEventListener("click", () => {
 });
 
 // ------------------------------------------------------------ Add New Task Menu toggle
-function toggle_new_task_form(button) {
-  button.addEventListener("click", () => {
-    const isHidden = new_task_form.classList.contains("opacity-0");
-
-    if (!isHidden) {
-      new_task_form.classList.replace("opacity-100", "opacity-0");
-      new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
-    } else {
-      new_task_form.classList.replace("opacity-0", "opacity-100");
-      new_task_form.classList.replace("pointer-events-none", "pointer-events-auto");
-    }
-  });
-}
-
-btn_close_form.addEventListener("click", () => {
-  new_task_form.classList.replace("opacity-100", "opacity-0");
-  new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
-});
 
 toggle_new_task_form(btn_add_task);
 toggle_new_task_form(btn_mobile_add_task);
+
+// Close new task form on button press
+[btn_new_task_cancel, btn_close_form].forEach((btn) => {
+  btn.addEventListener("click", close_form);
+});
 
 // ------------------------------------------------------------ Sort function
 
@@ -593,4 +615,41 @@ sort_name.addEventListener("click", () => {
     task_card(sort_tasks(completed_task_list, "name"), task_container);
   }
   sort_name.classList.toggle("sort-active");
+});
+
+// ------------------------------------- Add new task
+
+// Add New Task submission on button click or enter
+taskForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const new_task_name = document.getElementById("new-task-name").value;
+  const new_task_desc = document.getElementById("new-task-desc").value;
+  const new_task_priority = document.getElementById("new-task-priority").value;
+  const new_task_status = document.getElementById("new-task-status").value;
+  const new_task_date = document.getElementById("new-task-date").value;
+
+  const new_task = {
+    task_id: tasks_list.length + 1,
+    task_name: new_task_name,
+    task_desc: new_task_desc,
+    task_priority: new_task_priority,
+    task_status: new_task_status,
+    date: new_task_date,
+  };
+
+  tasks_list.push(new_task);
+  tab_lists_update();
+  filter_tasks();
+  search_tasks();
+  console.log(tasks_list);
+
+  // Show the success message (this triggers the downward expansion)
+  success_msg.classList.remove("max-h-0", "opacity-0");
+  success_msg.classList.add("max-h-20", "opacity-100", "mt-2"); // mt-2 adds a little gap
+
+  // Wait 2 seconds, then close the form
+  setTimeout(() => {
+    close_form();
+  }, 2000);
 });
