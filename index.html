@@ -230,6 +230,14 @@
         .tab-inactive {
           @apply text-text-400 hover:text-text-500;
         }
+
+        .sort-inactive {
+          @apply hover:bg-background-200/30 dark:hover:bg-background-300/60 text-text-500 hover:text-text-900;
+        }
+
+        .sort-active {
+          @apply bg-background-200 dark:bg-background-300/60 text-text-900;
+        }
       }
 
       /* dark mode */
@@ -325,14 +333,19 @@
                 <!-- Mobile: Hamburger Icon (Sidebar toggle) -->
                 <div class="lg:hidden relative">
                   <!-- Overlay for Mobile Menu -->
-                  <!-- <div id="overlay" class="lg:hidden pointer-events-none fixed inset-0 bg-background-200/50 dark:bg-background-100/50 backdrop-blur-sm opacity-100 transition-opacity duration-300 ease-in-out z-[80]"></div> -->
+                  <div id="overlay" class="lg:hidden pointer-events-none fixed inset-0 bg-background-200/50 dark:bg-background-100/50 backdrop-blur-sm opacity-0 transition-opacity duration-300 ease-in-out z-[80]"></div>
 
                   <button id="sidebar-toggle" class="lg:hidden text-text-500 hover:text-text-900 hover:bg-background-200 p-1 rounded-lg z-[90] relative cursor-pointer">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path></svg>
+                    <!-- Icon: Hamburger -->
+                    <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path></svg>
+                    <!-- Icon: Close -->
+                    <svg class="size-6 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
                   </button>
 
                   <!-- Mobile: Floating sidebar -->
-                  <div class="lg:hidden flex flex-col w-60 justify-start items-start bg-background-50 dark:bg-background-200 mt-1 rounded-lg absolute top-full px-1.5 py-1.5 gap-1.5 shadow-lg ring-1 ring-background-100/30 z-[100]">
+                  <div id="mobile-sidebar" class="lg:hidden flex flex-col w-60 justify-start items-start bg-background-50 dark:bg-background-200 mt-1 rounded-lg absolute top-full px-1.5 py-1.5 gap-1.5 shadow-lg ring-1 ring-background-100/30 z-[100] hidden">
                     <!-- Mobile Btn: Dashboard -->
                     <button id="btn-dashboard" class="flex justify-start items-center gap-3 px-3 py-2 rounded-lg bg-background-200 dark:bg-background-300/60 w-full cursor-pointer">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
@@ -551,13 +564,19 @@
                 </div>
 
                 <!-- Sort button -->
-                <div>
-                  <button class="flex justify-center items-center gap-2 text-sm hover:bg-background-100/50 dark:hover:bg-background-200 border border-background-200/50 rounded-md px-3 py-2 cursor-pointer">
+                <div class="relative">
+                  <button id="btn-sort" class="flex justify-center items-center gap-2 text-sm hover:bg-background-100/50 dark:hover:bg-background-200 border border-background-200/50 rounded-md px-3 py-2 cursor-pointer">
                     <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3 7.5L7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"></path>
                     </svg>
                     Sort
                   </button>
+                  <!-- Sort menu -->
+                  <div id="sort-menu" class="flex flex-col w-40 justify-start items-start bg-background-50 dark:bg-background-200 mt-1 rounded-lg absolute top-full right-0 px-1.5 py-1.5 gap-2 shadow-lg ring-1 ring-background-100/30 z-[100] hidden">
+                    <div id="sort-by-date" class="font-inter font-medium text-sm flex justify-start items-center gap-3 px-3 py-2 rounded-lg sort-inactive w-full cursor-pointer">Date</div>
+                    <div id="sort-by-priority" class="font-inter font-medium text-sm flex justify-start items-center gap-3 px-3 py-2 rounded-lg sort-inactive w-full cursor-pointer">Priority</div>
+                    <div id="sort-by-name" class="font-inter font-medium text-sm flex justify-start items-center gap-3 px-3 py-2 rounded-lg sort-inactive w-full cursor-pointer">Name</div>
+                  </div>
                 </div>
               </div>
             </div>
