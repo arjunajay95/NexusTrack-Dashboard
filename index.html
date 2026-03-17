@@ -220,7 +220,16 @@
             --accent-950: #fff3e6;
 
           }
+      }
 
+      @layer components {
+        .tab-active {
+          @apply text-accent-500 border-b-2 border-accent-500;
+        }
+
+        .tab-inactive {
+          @apply text-text-400 hover:text-text-500;
+        }
       }
 
       /* dark mode */
@@ -555,10 +564,10 @@
 
             <!-- Task tabs -->
             <div class="mt-2 flex justify-start items-center gap-2 border-b border-background-200/50">
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer text-accent-500 border-b-2 border-accent-500"><p class="">All</p></div>
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer text-text-400 hover:text-text-500"><p class="">To Do</p></div>
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer text-text-400 hover:text-text-500"><p class="">In Progress</p></div>
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer text-text-400 hover:text-text-500"><p class="">Completed</p></div>
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-active"><p class="">All</p></div>
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-inactive"><p class="">To Do</p></div>
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-inactive"><p class="">In Progress</p></div>
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-inactive"><p class="">Completed</p></div>
             </div>
           </div>
 

@@ -321,7 +321,7 @@ function task_card_features() {
       btn_status_switch.innerHTML = `<span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span>`;
 
       tab_lists_update();
-      if (!tabs[0]?.classList.contains("text-accent-500")) {
+      if (!tabs[0]?.classList.contains("tab-active")) {
         card.remove();
       }
     });
@@ -342,8 +342,8 @@ function filter_tasks() {
   task_card(tasks_list, task_container);
   tab_lists_update();
 
-  const active_tab_classes = ["text-accent-500", "border-b-2", "border-accent-500"];
-  const inactive_tab_classes = ["text-text-400", "hover:text-text-500"];
+  const active_tab_classes = ["tab-active"];
+  const inactive_tab_classes = ["tab-inactive"];
 
   task_tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -371,6 +371,46 @@ function filter_tasks() {
   });
 }
 
+function search_tasks() {
+  const tabs = document.querySelectorAll(".task-tab");
+  const search_val = document.getElementById("search-tasks");
+
+  // Search values for each tab, real-time, when the user types
+  search_val.addEventListener("input", (e) => {
+    let search_item = e.target.value.toLowerCase();
+
+    const tabs = document.querySelectorAll(".task-tab");
+
+    if (tabs[0]?.classList.contains("tab-active")) {
+      const result_arr = tasks_list.filter((task) => {
+        const t_name = task.task_name.toLowerCase();
+        return t_name.includes(search_item);
+      });
+      task_card(result_arr, task_container);
+    } else if (tabs[1]?.classList.contains("tab-active")) {
+      tab_lists_update();
+      const result_arr = to_do_task_list.filter((task) => {
+        const t_name = task.task_name.toLowerCase();
+        return t_name.includes(search_item);
+      });
+      task_card(result_arr, task_container);
+    } else if (tabs[2]?.classList.contains("tab-active")) {
+      tab_lists_update();
+      const result_arr = in_progress_task_list.filter((task) => {
+        const t_name = task.task_name.toLowerCase();
+        return t_name.includes(search_item);
+      });
+      task_card(result_arr, task_container);
+    } else {
+      tab_lists_update();
+      const result_arr = completed_task_list.filter((task) => {
+        const t_name = task.task_name.toLowerCase();
+        return t_name.includes(search_item);
+      });
+      task_card(result_arr, task_container);
+    }
+  });
+}
 // ------------------------------------------------------------------element selections
 
 // dark / light mode selections
@@ -388,6 +428,7 @@ const task_tabs = document.querySelectorAll(".task-tab");
 
 // Initialize task container - important for filtering for tabs
 filter_tasks();
+search_tasks();
 
 // ------------------------------------------------------------ dark mode toggle
 dark_mode.addEventListener("click", () => {
@@ -396,3 +437,5 @@ dark_mode.addEventListener("click", () => {
     svg.classList.toggle("hidden");
   });
 });
+
+// ------------------------------------------------------------ Search function
