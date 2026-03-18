@@ -372,7 +372,7 @@ function task_card(tasks_list, task_container) {
 
       task_container.innerHTML += `
                 <!-- Task card -->
-                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start bg-gradient-to-b from-background-200/50 border-t-2 hover:border-background-400 border-background-300 rounded-xl p-4 hover:shadow-md transition-all duration-200">
+                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start bg-gradient-to-b from-background-200/50 border-t-2 hover:border-background-400 border-background-300 rounded-xl p-4 hover:shadow-md hover:scale-102 active:scale-98 transition-all duration-200 cursor-pointer scale-95 opacity-0">
                   <div class="flex w-full justify-between items-start">
                     <div class="flex flex-col items-start gap-2">
                       <p id="task-name" class="task-name ${status_complete_text_color} ${status_complete_text_deco} text-sm font-semibold">${task.task_name}</p>
@@ -411,6 +411,18 @@ function task_card(tasks_list, task_container) {
                 </article>
       `;
     }
+
+    // requestAnimationFrame() forces the browser to render the initial "invisible" state first so it has something to animate from.
+    requestAnimationFrame(() => {
+      const cards = task_container.querySelectorAll(".task-card");
+      cards.forEach((card, index) => {
+        setTimeout(() => {
+          card.classList.remove("scale-95", "opacity-0");
+          card.classList.add("scale-100", "opacity-100");
+        }, index * 100); // 100ms delay per card
+      });
+    });
+
     task_card_features();
   }
 }
@@ -477,7 +489,20 @@ function task_card_features() {
 
       tasks_list = tasks_list.filter((task) => task.task_id != task_Id);
       tab_lists_update();
-      card.remove();
+      // card.remove();
+
+      // card remove animation
+      // add anim-end-state classes to card
+      card.classList.add("scale-50", "opacity-0", "transition-all", "duration-300", "pointer-events-none");
+
+      // Wait for the duration (300ms) then remove from DOM
+      card.addEventListener(
+        "transitionend",
+        () => {
+          card.remove();
+        },
+        { once: true },
+      );
 
       // If no tasks left, visible empty tasks message
       if (tasks_list.length === 0) {
