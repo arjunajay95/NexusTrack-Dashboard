@@ -234,11 +234,11 @@
 
       @layer components {
         .tab-active {
-          @apply text-accent-500 border-b-2 border-accent-500;
+          @apply text-accent-500 border-t-1 border-accent-500 bg-gradient-to-b from-background-200/50;
         }
 
         .tab-inactive {
-          @apply text-text-400 hover:text-text-500;
+          @apply text-text-400 hover:text-text-500 border-t-1 border-background-100 hover:border-background-300 hover:bg-gradient-to-b from-background-200/50;
         }
 
         .sort-inactive {
@@ -254,7 +254,7 @@
       @custom-variant dark (&:where(.dark, .dark *));
     </style>
   </head>
-  <body id="top" class="min-h-screen bg-background-100 dark:bg-background-100 text-text-800 transition-colors duration-200">
+  <body id="top" class="min-h-screen bg-background-100 dark:bg-background-100 text-text-800 transition-colors duration-300">
     <div class="grid lg:grid-cols-[260px_1fr] min-h-screen">
       <!-- Sidebar Navigation-->
       <!-- For larger screens -->
@@ -262,7 +262,7 @@
         <!-- NexusTrack Header (for larger screens) -->
         <header class="flex justify-start items-center border-b-1 border-background-300 px-6 py-4 gap-2">
           <div class="bg-primary-600 text-text-100 rounded-sm p-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="size-4">
               <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
             </svg>
           </div>
@@ -329,7 +329,7 @@
             <!-- Mobile: NexusTrack Header logo + title -->
             <header class="mx-auto lg:hidden flex justify-start items-center p-2 md:pb-4 gap-2 scale-200 md:scale-85">
               <div class="text-primary-600 md:bg-primary-600 md:text-text-100 rounded-sm p-1">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.0" stroke="currentColor" class="size-4">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
                 </svg>
               </div>
@@ -575,56 +575,56 @@
           <!-- Stat Cards -->
           <div class="mt-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             <!-- Card: Total Tasks -->
-            <article class="flex bg-background-300 border-t-4 border-background-800 justify-between items-start rounded-xl p-4">
+            <article class="flex bg-gradient-to-b from-background-300 to-background-100 border-t-4 border-background-800 justify-between items-start rounded-xl shadow-md dark:shadow-background-700/10 hover:dark:shadow-background-700/30 p-4 transition-all duration-400">
               <div class="flex flex-col">
-                <p class="text-text-500 text-sm font-semibold">Total Tasks</p>
+                <p class="text-text-700 text-sm font-semibold">Total Tasks</p>
                 <p id="total-tasks" class="text-text-900 text-3xl font-bold tracking-widest">15</p>
                 <p class="text-text-500 text-xs"><span id="last-week-tasks">+2</span> from last week</p>
               </div>
               <div class="text-text-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
                 </svg>
               </div>
             </article>
 
             <!-- Card: In Progress -->
-            <article class="flex bg-background-300 border-t-4 border-blue-500 justify-between items-start rounded-xl p-4">
+            <article class="flex bg-gradient-to-b from-blue-500/10 to-background-100 border-t-4 border-blue-500 justify-between items-start rounded-xl shadow-md dark:shadow-blue-700/10 hover:dark:shadow-blue-700/30 p-4 transition-all duration-400">
               <div class="flex flex-col">
-                <p class="text-text-500 text-sm font-semibold">In Progress</p>
+                <p class="text-blue-600 dark:text-blue-400 text-sm font-semibold">In Progress</p>
                 <p id="in-progress-tasks" class="text-text-900 text-3xl font-bold tracking-widest">5</p>
                 <p class="text-text-500 text-xs"><span id="this-week-tasks">3</span> due this week</p>
               </div>
               <div class="text-blue-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
               </div>
             </article>
 
             <!-- Card: Completed -->
-            <article class="flex bg-background-300 border-t-4 border-green-500 justify-between items-start rounded-xl p-4">
+            <article class="flex bg-gradient-to-b from-green-500/10 to-background-100 border-t-4 border-green-500 justify-between items-start rounded-xl shadow-md dark:shadow-green-700/10 hover:dark:shadow-green-700/30 p-4 transition-all duration-400">
               <div class="flex flex-col">
-                <p class="text-text-500 text-sm font-semibold">Completed</p>
+                <p class="text-green-600 dark:text-green-400 text-sm font-semibold">Completed</p>
                 <p id="completed-tasks" class="text-text-900 text-3xl font-bold tracking-widest">4</p>
                 <p class="text-text-500 text-xs"><span id="completion-rate">67</span>% completion rate</p>
               </div>
               <div class="text-green-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
               </div>
             </article>
 
             <!-- Card: Overdue -->
-            <article class="flex bg-background-300 border-t-4 border-rose-500 justify-between items-start rounded-xl p-4 animate-pulse">
+            <article class="flex bg-gradient-to-b from-rose-500/10 to-background-100 border-t-4 border-rose-500 justify-between items-start rounded-xl shadow-md dark:shadow-rose-700/10 hover:dark:shadow-rose-700/30 p-4 transition-all duration-400 animate-pulse">
               <div class="flex flex-col">
-                <p class="text-text-500 text-sm font-semibold">Overdue</p>
+                <p class="text-rose-600 dark:text-rose-400 text-sm font-semibold">Overdue</p>
                 <p id="overdue-tasks" class="text-text-900 text-3xl font-bold tracking-widest">12</p>
                 <p id="label-attention" class="text-rose-500 text-xs">Needs attention</p>
               </div>
               <div class="text-rose-500">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
                 </svg>
               </div>
@@ -665,11 +665,11 @@
             </div>
 
             <!-- Task tabs -->
-            <div class="mt-2 flex justify-start items-center gap-2 border-b border-background-300">
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-active"><p class="">All</p></div>
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-inactive"><p class="">To Do</p></div>
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-inactive"><p class="">In Progress</p></div>
-              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium cursor-pointer tab-inactive"><p class="">Completed</p></div>
+            <div class="mt-2 flex justify-start items-center gap-2 border-b rounded-xl border-background-300">
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium rounded-xl cursor-pointer tab-active"><p class="">All</p></div>
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium rounded-xl cursor-pointer tab-inactive"><p class="">To Do</p></div>
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium rounded-xl cursor-pointer tab-inactive"><p class="">In Progress</p></div>
+              <div class="task-tab px-2 md:px-4 py-2 text-sm font-medium rounded-xl cursor-pointer tab-inactive"><p class="">Completed</p></div>
             </div>
           </div>
 

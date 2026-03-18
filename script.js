@@ -168,6 +168,7 @@ let completed_task_list = [];
 let total_tasks, in_progress_tasks, completed_tasks;
 
 let status_text_color,
+  status_border_color,
   status_bg_color,
   status_text,
   status_btn = "";
@@ -262,6 +263,7 @@ function stats_update() {
 function set_status_todo() {
   status_text_color = "text-text-500";
   status_bg_color = "bg-background-50";
+  status_border_color = "border-background-400";
   status_text = "To Do";
   status_btn = "Mark In Progress";
 }
@@ -269,6 +271,7 @@ function set_status_todo() {
 function set_status_inprogress() {
   status_text_color = "text-blue-500";
   status_bg_color = "bg-blue-500/10";
+  status_border_color = "border-blue-200/50";
   status_text = "In Progress";
   status_btn = "Mark Completed";
 }
@@ -276,6 +279,7 @@ function set_status_inprogress() {
 function set_status_completed() {
   status_text_color = "text-green-500";
   status_bg_color = "bg-green-500/10";
+  status_border_color = "border-green-200/50";
   status_text = "Completed";
   status_btn = "Undo";
 }
@@ -368,7 +372,7 @@ function task_card(tasks_list, task_container) {
 
       task_container.innerHTML += `
                 <!-- Task card -->
-                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start bg-background-200 rounded-xl p-4 hover:shadow-md transition-all duration-200">
+                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start bg-gradient-to-b from-background-200/50 border-t-2 hover:border-background-400 border-background-300 rounded-xl p-4 hover:shadow-md transition-all duration-200">
                   <div class="flex w-full justify-between items-start">
                     <div class="flex flex-col items-start gap-2">
                       <p id="task-name" class="task-name ${status_complete_text_color} ${status_complete_text_deco} text-sm font-semibold">${task.task_name}</p>
@@ -380,7 +384,7 @@ function task_card(tasks_list, task_container) {
                         </div>
                         <!-- Progress badge -->
                         <div class="progress-badge">
-                          <p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>
+                          <p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} border-t-1 ${status_border_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>
                         </div>
                       </div>
                     </div>
@@ -456,7 +460,7 @@ function task_card_features() {
         card.querySelector(".task-name").classList.replace("text-text-900", "text-text-500");
       }
 
-      progress_badge.innerHTML = `<p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>`;
+      progress_badge.innerHTML = `<p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} border-t-1 ${status_border_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>`;
       btn_status_switch.innerHTML = `<span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-300 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span>`;
 
       tab_lists_update();
