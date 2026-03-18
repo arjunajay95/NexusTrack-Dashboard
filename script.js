@@ -128,15 +128,36 @@ const overlay = document.getElementById("overlay");
 const user_profile = document.getElementById("user-profile");
 const user_profile_options = document.getElementById("user-profile-options");
 
-// add new task elements selections
-const new_task_form = document.getElementById("new-task-form");
+// Add-New-Task elements selections
+const new_task_overlay = document.getElementById("new-task-overlay");
 const btn_add_task = document.getElementById("btn-add-task");
 const btn_mobile_add_task = document.getElementById("btn-mobile-add-task");
 const btn_close_form = document.getElementById("close-task-form");
 const btn_new_task_submit = document.getElementById("new-task-submit");
 const btn_new_task_cancel = document.getElementById("new-task-cancel");
-const taskForm = document.querySelector("form");
+const new_taskForm = document.querySelector(".form-new-task");
 const success_msg = document.getElementById("success-msg");
+
+const new_task_name = document.getElementById("new-task-name");
+const new_task_desc = document.getElementById("new-task-desc");
+const new_task_priority = document.getElementById("new-task-priority");
+const new_task_status = document.getElementById("new-task-status");
+const new_task_date = document.getElementById("new-task-date");
+
+// Edit-Task elements selections
+
+const edit_task_overlay = document.getElementById("edit-task-overlay");
+const btn_close_edit_task_form = document.getElementById("close-edit-task-form");
+const btn_edit_task_submit = document.getElementById("edit-task-submit");
+const btn_edit_task_cancel = document.getElementById("edit-task-cancel");
+const edit_taskForm = document.querySelector(".form-edit-task");
+const saved_msg = document.getElementById("saved-msg");
+
+const edit_task_name = document.getElementById("edit-task-name");
+const edit_task_desc = document.getElementById("edit-task-desc");
+const edit_task_priority = document.getElementById("edit-task-priority");
+const edit_task_status = document.getElementById("edit-task-status");
+const edit_task_date = document.getElementById("edit-task-date");
 
 //------------------------------------------------------------------ Variable declarations
 
@@ -179,24 +200,47 @@ function stats_update() {
 
   // Calculate amount of dates from last week and due dates
   const today = new Date();
-  const lastWeek = new Date();
-  const thisWeek = new Date();
-  lastWeek.setDate(today.getDate() - 7);
-  thisWeek.setDate(today.getDate() + 7);
+  today.setHours(0, 0, 0, 0);
 
+  // Assume a week is from Monday - Sunday
+  // Calculate "Last Week" (Monday - Sunday)
+  const lastWeekSunday = new Date(today);
+  // Get the most recent Sunday (0) and go back to the previous one
+  lastWeekSunday.setDate(today.getDate() - today.getDay());
+  lastWeekSunday.setHours(23, 59, 59, 999);
+
+  const lastWeekMonday = new Date(lastWeekSunday);
+  lastWeekMonday.setDate(lastWeekSunday.getDate() - 6);
+  lastWeekMonday.setHours(0, 0, 0, 0);
+
+  // Calculate "This Week" (Monday - Sunday)
+  const thisWeekMonday = new Date(lastWeekSunday);
+  thisWeekMonday.setDate(lastWeekSunday.getDate() + 1);
+  thisWeekMonday.setHours(0, 0, 0, 0);
+
+  const thisWeekSunday = new Date(thisWeekMonday);
+  thisWeekSunday.setDate(thisWeekMonday.getDate() + 6);
+  thisWeekSunday.setHours(23, 59, 59, 999);
+
+  //------------------------ Logic Calculations ----------------------------
+
+  // Calculate tasks(all statuses) from last week
   const lastWeek_count = tasks_list.filter((task) => {
     const taskDate = new Date(task.date);
-    return taskDate >= lastWeek && taskDate <= today;
+    return taskDate <= lastWeekSunday && taskDate >= lastWeekMonday;
   }).length;
 
+  // Calculate "In-Progress" tasks due this week
   const thisWeek_count = tasks_list.filter((task) => {
     const taskDate = new Date(task.date);
-    if (task.task_status === "in-progress") return taskDate >= today && taskDate <= thisWeek;
+    return task.task_status === "in-progress" && taskDate >= thisWeekMonday && taskDate <= thisWeekSunday;
   }).length;
 
+  // Calculate Overdue tasks - except completed tasks
   const overdue = tasks_list.filter((task) => {
     const taskDate = new Date(task.date);
-    if (task.task_status === "in-progress") return taskDate <= today;
+    // Using "< today" ensures tasks due "today" aren't overdue yet
+    return task.task_status !== "completed" && taskDate < today;
   }).length;
 
   const last_week_tasks = document.getElementById("last-week-tasks");
@@ -234,6 +278,42 @@ function set_status_completed() {
   status_bg_color = "bg-green-500/10";
   status_text = "Completed";
   status_btn = "Undo";
+}
+
+// Toggle Add-New-Task form upon button click function
+function toggle_new_task_form(button) {
+  button.addEventListener("click", () => {
+    const isHidden = new_task_overlay.classList.contains("opacity-0");
+
+    if (!isHidden) {
+      new_task_overlay.classList.replace("opacity-100", "opacity-0");
+      new_task_overlay.classList.replace("pointer-events-auto", "pointer-events-none");
+      new_taskForm.classList.replace("pointer-events-auto", "pointer-events-none");
+    } else {
+      new_task_overlay.classList.replace("opacity-0", "opacity-100");
+      new_task_overlay.classList.replace("pointer-events-none", "pointer-events-auto");
+      new_taskForm.classList.replace("pointer-events-none", "pointer-events-auto");
+    }
+  });
+}
+
+// Toggle Edit-Task form upon button click function
+function toggle_edit_task_form() {
+  const isHidden = edit_task_overlay.classList.contains("opacity-0");
+
+  if (isHidden) {
+    // Show it
+    edit_task_overlay.classList.remove("opacity-0", "pointer-events-none");
+    edit_task_overlay.classList.add("opacity-100", "pointer-events-auto");
+    edit_taskForm.classList.remove("pointer-events-none");
+    edit_taskForm.classList.add("pointer-events-auto");
+  } else {
+    // Hide it
+    edit_task_overlay.classList.add("opacity-0", "pointer-events-none");
+    edit_task_overlay.classList.remove("opacity-100", "pointer-events-auto");
+    edit_taskForm.classList.add("pointer-events-none");
+    edit_taskForm.classList.remove("pointer-events-auto");
+  }
 }
 
 // task card generate function
@@ -304,10 +384,20 @@ function task_card(tasks_list, task_container) {
                         </div>
                       </div>
                     </div>
-                    <div id="delete-${task.task_id}" class="delete-task text-text-500 lg:hover:text-rose-500 lg:hover:bg-rose-500/10 active:text-rose-500 active:bg-rose-500/10 lg:opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                      </svg>
+                    <div class="flex flex-col">        
+                      <!--Delete Task -->
+                      <div id="delete-${task.task_id}" class="delete-task text-text-500 lg:hover:text-rose-500 lg:hover:bg-rose-500/10 active:text-rose-500 active:bg-rose-500/10 lg:opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                      </div>
+
+                      <!--Edit Task -->
+                      <div id="edit-${task.task_id}" class="edit-task text-text-500 lg:hover:text-secondary-700 lg:hover:bg-secondary-500/10 active:text-secondary-700 active:bg-secondary-500/10 lg:opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
                   <div class="flex justify-between items-center border-t border-background-200/50 w-full pt-4 mt-4">
@@ -326,17 +416,20 @@ function task_card_features() {
   const task_card_list = document.querySelectorAll(".task-card");
 
   // implement status switch btn
-  task_card_list.forEach((card, i) => {
+  task_card_list.forEach((card) => {
     const btn_status_switch = card.querySelector("button");
     const progress_badge = card.querySelector(".progress-badge");
     const delete_task = card.querySelector(".delete-task");
+    const edit_task = card.querySelector(".edit-task");
 
-    // Delete btn toggle over mouse pointer hover
+    // Delete & Edit btn toggle over mouse pointer hover
     card.addEventListener("mouseover", () => {
       delete_task.classList.replace("lg:opacity-0", "lg:opacity-100");
+      edit_task.classList.replace("lg:opacity-0", "lg:opacity-100");
     });
     card.addEventListener("mouseout", () => {
       delete_task.classList.replace("lg:opacity-100", "lg:opacity-0");
+      edit_task.classList.replace("lg:opacity-100", "lg:opacity-0");
     });
 
     // Change status with btn click event
@@ -374,6 +467,7 @@ function task_card_features() {
 
     // Delete task with btn click event
     delete_task.addEventListener("click", (e) => {
+      // Extract the task id of the clicked task card
       const btn_Id = e.currentTarget.id;
       const task_Id = Number(btn_Id.split("-")[1]);
 
@@ -386,7 +480,64 @@ function task_card_features() {
         task_empty.classList.remove("hidden");
       }
     });
+
+    // Edit task with btn click event
+    edit_task.addEventListener("click", (e) => {
+      // Extract the task id of the clicked task card
+      const btn_Id = e.currentTarget.id;
+      const task_Id = Number(btn_Id.split("-")[1]);
+
+      toggle_edit_task_form();
+      populate_form(task_Id);
+
+      edit_taskForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        // Update dictionary entry
+        const edited_task = {
+          task_id: task_Id,
+          task_name: edit_task_name.value,
+          task_desc: edit_task_desc.value,
+          task_priority: edit_task_priority.value,
+          task_status: edit_task_status.value,
+          date: edit_task_date.value,
+        };
+
+        const index_to_edit = tasks_list.findIndex((task) => task.task_id === task_Id);
+
+        if (index_to_edit !== -1) {
+          tasks_list[index_to_edit] = edited_task;
+        }
+
+        // Update task containers
+        tab_lists_update();
+        filter_tasks();
+        search_tasks();
+
+        // Show the success message (this triggers the downward expansion)
+        saved_msg.classList.remove("max-h-0", "opacity-0");
+        saved_msg.classList.add("max-h-20", "opacity-100", "mt-2"); // mt-2 adds a little gap
+
+        // Wait 1 second, then close the form
+        setTimeout(() => {
+          close_form(edit_task_overlay, edit_taskForm, saved_msg);
+        }, 1000);
+      });
+    });
   });
+}
+
+// populate task info into form function
+function populate_form(id) {
+  const task = tasks_list.find((t) => t.task_id === id);
+
+  if (!task) return;
+
+  edit_task_name.value = task.task_name;
+  edit_task_desc.value = task.task_desc;
+  edit_task_priority.value = task.task_priority;
+  edit_task_status.value = task.task_status;
+  edit_task_date.value = task.date;
 }
 
 // generate tasks for all tabs function
@@ -445,28 +596,32 @@ function search_tasks() {
     if (task_tabs[0]?.classList.contains("tab-active")) {
       const result_arr = tasks_list.filter((task) => {
         const t_name = task.task_name.toLowerCase();
-        return t_name.includes(search_item);
+        const t_desc = task.task_desc.toLowerCase();
+        return t_name.includes(search_item) || t_desc.includes(search_item);
       });
       task_card(result_arr, task_container);
     } else if (task_tabs[1]?.classList.contains("tab-active")) {
       tab_lists_update();
       const result_arr = to_do_task_list.filter((task) => {
         const t_name = task.task_name.toLowerCase();
-        return t_name.includes(search_item);
+        const t_desc = task.task_desc.toLowerCase();
+        return t_name.includes(search_item) || t_desc.includes(search_item);
       });
       task_card(result_arr, task_container);
     } else if (task_tabs[2]?.classList.contains("tab-active")) {
       tab_lists_update();
       const result_arr = in_progress_task_list.filter((task) => {
         const t_name = task.task_name.toLowerCase();
-        return t_name.includes(search_item);
+        const t_desc = task.task_desc.toLowerCase();
+        return t_name.includes(search_item) || t_desc.includes(search_item);
       });
       task_card(result_arr, task_container);
-    } else {
+    } else if (task_tabs[3]?.classList.contains("tab-active")) {
       tab_lists_update();
       const result_arr = completed_task_list.filter((task) => {
         const t_name = task.task_name.toLowerCase();
-        return t_name.includes(search_item);
+        const t_desc = task.task_desc.toLowerCase();
+        return t_name.includes(search_item) || t_desc.includes(search_item);
       });
       task_card(result_arr, task_container);
     }
@@ -502,35 +657,18 @@ function sort_tasks(arr, criteria) {
   return sorted_arr;
 }
 
-// Toggle Add-New-Task form upon button click function
-function toggle_new_task_form(button) {
-  button.addEventListener("click", () => {
-    const isHidden = new_task_form.classList.contains("opacity-0");
-
-    if (!isHidden) {
-      new_task_form.classList.replace("opacity-100", "opacity-0");
-      new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
-      taskForm.classList.replace("pointer-events-auto", "pointer-events-none");
-    } else {
-      new_task_form.classList.replace("opacity-0", "opacity-100");
-      new_task_form.classList.replace("pointer-events-none", "pointer-events-auto");
-      taskForm.classList.replace("pointer-events-none", "pointer-events-auto");
-    }
-  });
-}
-
-// Close add new task form function
-function close_form() {
-  new_task_form.classList.replace("opacity-100", "opacity-0");
-  new_task_form.classList.replace("pointer-events-auto", "pointer-events-none");
-  taskForm.classList.replace("pointer-events-auto", "pointer-events-none");
+// Close task form function
+function close_form(overlay, form, message) {
+  overlay.classList.replace("opacity-100", "opacity-0");
+  overlay.classList.replace("pointer-events-auto", "pointer-events-none");
+  form.classList.replace("pointer-events-auto", "pointer-events-none");
 
   // Reset success message state for next time
-  success_msg.classList.add("max-h-0", "opacity-0");
-  success_msg.classList.remove("max-h-20", "opacity-100", "mt-2");
+  message.classList.add("max-h-0", "opacity-0");
+  message.classList.remove("max-h-20", "opacity-100", "mt-2");
 
-  // Reset form for the next time
-  taskForm.reset();
+  // Reset form for the next time after 1 sec
+  setTimeout(() => form.reset(), 1000);
 }
 
 // ------------------------------------------------------------------- Initialize
@@ -573,21 +711,17 @@ user_profile.addEventListener("click", () => {
   user_profile_options.classList.toggle("hidden");
 });
 
-// ------------------------------------------------------------ Add New Task Menu toggle
-
-toggle_new_task_form(btn_add_task);
-toggle_new_task_form(btn_mobile_add_task);
-
-// Close new task form on button press
-[btn_new_task_cancel, btn_close_form].forEach((btn) => {
-  btn.addEventListener("click", close_form);
-});
-
 // ------------------------------------------------------------ Sort function
 
 // Toggle sort menu with click event
 btn_sort.addEventListener("click", () => {
   sort_menu.classList.toggle("hidden");
+});
+
+window.addEventListener("click", (e) => {
+  if (!btn_sort.contains(e.target) && !sort_menu.contains(e.target)) {
+    sort_menu.classList.add("hidden");
+  }
 });
 
 // sort by date
@@ -644,26 +778,20 @@ sort_name.addEventListener("click", () => {
   sort_name.classList.toggle("sort-active");
 });
 
-// ------------------------------------- Add new task
+// ------------------------------------------------------------------ Add New Task
 
 // Add New Task submission on button click or enter
-taskForm.addEventListener("submit", (e) => {
+new_taskForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
-  const new_task_name = document.getElementById("new-task-name").value;
-  const new_task_desc = document.getElementById("new-task-desc").value;
-  const new_task_priority = document.getElementById("new-task-priority").value;
-  const new_task_status = document.getElementById("new-task-status").value;
-  const new_task_date = document.getElementById("new-task-date").value;
 
   // Add new task dictionary entry
   const new_task = {
     task_id: tasks_list.length + 1,
-    task_name: new_task_name,
-    task_desc: new_task_desc,
-    task_priority: new_task_priority,
-    task_status: new_task_status,
-    date: new_task_date,
+    task_name: new_task_name.value,
+    task_desc: new_task_desc.value,
+    task_priority: new_task_priority.value,
+    task_status: new_task_status.value,
+    date: new_task_date.value,
   };
 
   // Append the new task to the list
@@ -677,10 +805,55 @@ taskForm.addEventListener("submit", (e) => {
   success_msg.classList.remove("max-h-0", "opacity-0");
   success_msg.classList.add("max-h-20", "opacity-100", "mt-2"); // mt-2 adds a little gap
 
-  // Wait 2 seconds, then close the form
+  // Wait 1 second, then close the form
   setTimeout(() => {
-    close_form();
-  }, 2000);
+    close_form(new_task_overlay, new_taskForm, success_msg);
+  }, 1000);
+});
+
+// ------------------------------------------------------------ Add New Task Form toggle
+
+toggle_new_task_form(btn_add_task);
+toggle_new_task_form(btn_mobile_add_task);
+
+// Close new task form on button press
+[btn_new_task_cancel, btn_close_form].forEach((btn) => {
+  btn.addEventListener("click", () => close_form(new_task_overlay, new_taskForm, success_msg));
+});
+
+// Close new task form when clicked outside (overlay)
+new_task_overlay.addEventListener("click", (e) => {
+  if (e.target === new_task_overlay) {
+    close_form(new_task_overlay, new_taskForm, success_msg);
+  }
+});
+
+// Close new task form on "Escape" key press
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    close_form(new_task_overlay, new_taskForm, success_msg);
+  }
+});
+
+// ----------------------------------------------------------- Edit Task Form actions
+
+// Close edit task form on button press
+[btn_edit_task_cancel, btn_close_edit_task_form].forEach((btn) => {
+  btn.addEventListener("click", () => close_form(edit_task_overlay, edit_taskForm, saved_msg));
+});
+
+// Close edit task form when clicked outside (overlay)
+edit_task_overlay.addEventListener("click", (e) => {
+  if (e.target === edit_task_overlay) {
+    close_form(edit_task_overlay, edit_taskForm, saved_msg);
+  }
+});
+
+// Close new task form on "Escape" key press
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    close_form(edit_task_overlay, edit_taskForm, saved_msg);
+  }
 });
 
 // ---------------------------------------FAQ toggles
