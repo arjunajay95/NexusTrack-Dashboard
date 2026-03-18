@@ -348,17 +348,17 @@ function task_card(tasks_list, task_container) {
       if (task.task_priority.toLowerCase() === "low") {
         priority_text_color = "text-green-500";
         priority_bg_color = "bg-green-500/10";
-        priority_ring_color = "ring-green-200/80";
+        priority_ring_color = "ring-green-500/20";
         priority_text = "Low";
       } else if (task.task_priority.toLowerCase() === "medium") {
         priority_text_color = "text-amber-500";
         priority_bg_color = "bg-amber-500/10";
-        priority_ring_color = "ring-amber-200/80";
+        priority_ring_color = "ring-amber-500/20";
         priority_text = "Medium";
       } else {
         priority_text_color = "text-rose-500";
         priority_bg_color = "bg-rose-500/10";
-        priority_ring_color = "ring-rose-200/80";
+        priority_ring_color = "ring-rose-500/20";
         priority_text = "High";
       }
 
@@ -368,7 +368,7 @@ function task_card(tasks_list, task_container) {
 
       task_container.innerHTML += `
                 <!-- Task card -->
-                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start border border-background-200/50 rounded-xl p-4 hover:shadow-md transition-all duration-200">
+                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start bg-background-200 rounded-xl p-4 hover:shadow-md transition-all duration-200">
                   <div class="flex w-full justify-between items-start">
                     <div class="flex flex-col items-start gap-2">
                       <p id="task-name" class="task-name ${status_complete_text_color} ${status_complete_text_deco} text-sm font-semibold">${task.task_name}</p>
@@ -393,16 +393,16 @@ function task_card(tasks_list, task_container) {
                       </div>
 
                       <!--Edit Task -->
-                      <div id="edit-${task.task_id}" class="edit-task text-text-500 lg:hover:text-secondary-700 lg:hover:bg-secondary-500/10 active:text-secondary-700 active:bg-secondary-500/10 lg:opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
+                      <div id="edit-${task.task_id}" class="edit-task text-text-500 lg:hover:text-primary-700 lg:hover:bg-primary-500/10 active:text-primary-700 active:bg-primary-500/10 lg:opacity-0 rounded-lg p-1 cursor-pointer transition-opacity duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
                           <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                         </svg>
                       </div>
                     </div>
                   </div>
-                  <div class="flex justify-between items-center border-t border-background-200/50 w-full pt-4 mt-4">
+                  <div class="flex justify-between items-center border-t border-background-300 w-full pt-4 mt-4">
                     <p id="date" class="text-text-500 text-[11px]">${formatted_date}</p>
-                    <button id="btn-${task.task_id}"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span></button>
+                    <button id="btn-${task.task_id}"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-300 px-2 py-1 hover:bg-background-300 cursor-pointer">${status_btn}</span></button>
                   </div>
                 </article>
       `;
@@ -457,7 +457,7 @@ function task_card_features() {
       }
 
       progress_badge.innerHTML = `<p class="text-[11px] font-medium ${status_text_color} ${status_bg_color} py-0.5 px-2 rounded-full tracking-wide">${status_text}</p>`;
-      btn_status_switch.innerHTML = `<span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-200/50 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span>`;
+      btn_status_switch.innerHTML = `<span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-300 px-2 py-1 hover:bg-background-100/50 dark:hover:bg-background-200 cursor-pointer">${status_btn}</span>`;
 
       tab_lists_update();
       if (!task_tabs[0]?.classList.contains("tab-active")) {
