@@ -897,12 +897,12 @@ faq_blocks.forEach((block) => {
     const icon = block.querySelector(".accordion-chevron");
 
     if (isHidden) {
-      answer.classList.replace("max-h-0", "max-h-50");
+      answer.classList.replace("max-h-0", "max-h-100");
       answer.classList.replace("opacity-0", "opacity-100");
       answer.classList.add("mx-3", "mb-3");
       icon.style.transform = "rotate(0deg)";
     } else {
-      answer.classList.replace("max-h-50", "max-h-0");
+      answer.classList.replace("max-h-100", "max-h-0");
       answer.classList.replace("opacity-100", "opacity-0");
       answer.classList.remove("mx-3", "mb-3");
       icon.style.transform = "rotate(180deg)";
