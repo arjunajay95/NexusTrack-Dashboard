@@ -253,6 +253,16 @@ function stats_update() {
   const overdue_tasks = document.getElementById("overdue-tasks");
   overdue_tasks.textContent = overdue;
 
+  // Make "Overdue" stat card stop pulsing and go grayscale when there's no overdue tasks
+  const overdue_card = document.getElementById("overdue-card");
+  if (overdue === 0) {
+    overdue_card.classList.remove("animate-pulse");
+    overdue_card.classList.add("grayscale");
+  } else {
+    overdue_card.classList.add("animate-pulse");
+    overdue_card.classList.remove("grayscale");
+  }
+
   // Calculate completion rate
   const completion_rate = (completed_task_list.length / tasks_list.length) * 100;
   const completion = document.getElementById("completion-rate");
