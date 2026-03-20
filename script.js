@@ -170,6 +170,9 @@ let completed_task_list = [];
 // Variables for task statistics
 let total_tasks, in_progress_tasks, completed_tasks;
 
+// Track the ID of current editing task
+let currentEditingId = null;
+
 // Variables for task (card) status badge
 let status_text_color,
   status_border_color,
@@ -273,7 +276,7 @@ function stats_update() {
   completion.textContent = Math.round(completion_rate);
 }
 
-// Task (card) status functions
+// Task (card) Set-Status functions
 function set_status_todo() {
   status_text_color = "text-text-500";
   status_bg_color = "bg-background-50";
@@ -301,13 +304,16 @@ function set_status_completed() {
 // Toggle Add-New-Task form upon button click function
 function toggle_new_task_form(button) {
   button.addEventListener("click", () => {
+    // Check if overlay is already invisible
     const isHidden = new_task_overlay.classList.contains("opacity-0");
 
     if (!isHidden) {
+      // If visible, hide that and the form
       new_task_overlay.classList.replace("opacity-100", "opacity-0");
       new_task_overlay.classList.replace("pointer-events-auto", "pointer-events-none");
       new_taskForm.classList.replace("pointer-events-auto", "pointer-events-none");
     } else {
+      // Otherwise make all visible
       new_task_overlay.classList.replace("opacity-0", "opacity-100");
       new_task_overlay.classList.replace("pointer-events-none", "pointer-events-auto");
       new_taskForm.classList.replace("pointer-events-none", "pointer-events-auto");
@@ -331,6 +337,26 @@ function toggle_edit_task_form() {
     edit_task_overlay.classList.remove("opacity-100", "pointer-events-auto");
     edit_taskForm.classList.add("pointer-events-none");
     edit_taskForm.classList.remove("pointer-events-auto");
+  }
+}
+
+function toggle_form(overlay, form) {
+  const isHidden = overlay.classList.contains("opacity-0");
+
+  // Classes to swap
+  const showClasses = ["opacity-100", "pointer-events-auto"];
+  const hideClasses = ["opacity-0", "pointer-events-none"];
+
+  if (isHidden) {
+    overlay.classList.remove(...hideClasses);
+    overlay.classList.add(...showClasses);
+    form.classList.remove("pointer-events-none");
+    form.classList.add("pointer-events-auto");
+  } else {
+    overlay.classList.remove(...showClasses);
+    overlay.classList.add(...hideClasses);
+    form.classList.remove("pointer-events-auto");
+    form.classList.add("pointer-events-none");
   }
 }
 
@@ -524,48 +550,51 @@ function task_card_features() {
       }
     });
 
-    // Edit task with btn click event
+    // Edit task click event - Loads form with data
     edit_task.addEventListener("click", (e) => {
-      // Extract the task id of the clicked task card
       const btn_Id = e.currentTarget.id;
-      const task_Id = Number(btn_Id.split("-")[1]);
+      currentEditingId = Number(btn_Id.split("-")[1]); // Update with current editing ID
 
-      toggle_edit_task_form();
-      populate_form(task_Id);
+      //toggle_edit_task_form();
+      toggle_form(edit_task_overlay, edit_taskForm);
+      populate_form(currentEditingId);
+    });
 
-      edit_taskForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+    // Submit Task Edits
+    edit_taskForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (currentEditingId === null) return;
 
-        // Update dictionary entry
-        const edited_task = {
-          task_id: task_Id,
-          task_name: edit_task_name.value,
-          task_desc: edit_task_desc.value,
-          task_priority: edit_task_priority.value,
-          task_status: edit_task_status.value,
-          date: edit_task_date.value,
-        };
+      // Update dictionary entry
+      const edited_task = {
+        task_id: currentEditingId,
+        task_name: edit_task_name.value,
+        task_desc: edit_task_desc.value,
+        task_priority: edit_task_priority.value,
+        task_status: edit_task_status.value,
+        date: edit_task_date.value,
+      };
 
-        const index_to_edit = tasks_list.findIndex((task) => task.task_id === task_Id);
+      const index_to_edit = tasks_list.findIndex((task) => task.task_id === currentEditingId);
+      if (index_to_edit !== -1) {
+        tasks_list[index_to_edit] = edited_task;
+      }
 
-        if (index_to_edit !== -1) {
-          tasks_list[index_to_edit] = edited_task;
-        }
+      // Update task containers
+      tab_lists_update();
+      filter_tasks();
+      search_tasks();
 
-        // Update task containers
-        tab_lists_update();
-        filter_tasks();
-        search_tasks();
+      // Show the success message (this triggers the downward expansion)
+      saved_msg.classList.remove("max-h-0", "opacity-0");
+      saved_msg.classList.add("max-h-20", "opacity-100", "mt-2"); // mt-2 adds a little gap
 
-        // Show the success message (this triggers the downward expansion)
-        saved_msg.classList.remove("max-h-0", "opacity-0");
-        saved_msg.classList.add("max-h-20", "opacity-100", "mt-2"); // mt-2 adds a little gap
+      // Wait 1 second, then close the form
+      setTimeout(() => {
+        close_form(edit_task_overlay, edit_taskForm, saved_msg);
+      }, 1000);
 
-        // Wait 1 second, then close the form
-        setTimeout(() => {
-          close_form(edit_task_overlay, edit_taskForm, saved_msg);
-        }, 1000);
-      });
+      currentEditingId = null; // Resets editing ID after submit
     });
   });
 }
