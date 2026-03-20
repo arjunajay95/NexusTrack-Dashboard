@@ -301,45 +301,7 @@ function set_status_completed() {
   status_btn = "Undo";
 }
 
-// Toggle Add-New-Task form upon button click function
-function toggle_new_task_form(button) {
-  button.addEventListener("click", () => {
-    // Check if overlay is already invisible
-    const isHidden = new_task_overlay.classList.contains("opacity-0");
-
-    if (!isHidden) {
-      // If visible, hide that and the form
-      new_task_overlay.classList.replace("opacity-100", "opacity-0");
-      new_task_overlay.classList.replace("pointer-events-auto", "pointer-events-none");
-      new_taskForm.classList.replace("pointer-events-auto", "pointer-events-none");
-    } else {
-      // Otherwise make all visible
-      new_task_overlay.classList.replace("opacity-0", "opacity-100");
-      new_task_overlay.classList.replace("pointer-events-none", "pointer-events-auto");
-      new_taskForm.classList.replace("pointer-events-none", "pointer-events-auto");
-    }
-  });
-}
-
-// Toggle Edit-Task form upon button click function
-function toggle_edit_task_form() {
-  const isHidden = edit_task_overlay.classList.contains("opacity-0");
-
-  if (isHidden) {
-    // Show it
-    edit_task_overlay.classList.remove("opacity-0", "pointer-events-none");
-    edit_task_overlay.classList.add("opacity-100", "pointer-events-auto");
-    edit_taskForm.classList.remove("pointer-events-none");
-    edit_taskForm.classList.add("pointer-events-auto");
-  } else {
-    // Hide it
-    edit_task_overlay.classList.add("opacity-0", "pointer-events-none");
-    edit_task_overlay.classList.remove("opacity-100", "pointer-events-auto");
-    edit_taskForm.classList.add("pointer-events-none");
-    edit_taskForm.classList.remove("pointer-events-auto");
-  }
-}
-
+// Toggle form upon button click function
 function toggle_form(overlay, form) {
   const isHidden = overlay.classList.contains("opacity-0");
 
@@ -471,7 +433,7 @@ function task_card(tasks_list, task_container) {
 function task_card_features() {
   const task_card_list = document.querySelectorAll(".task-card");
 
-  // implement status switch btn
+  // Implement status switch btn
   task_card_list.forEach((card) => {
     const btn_status_switch = card.querySelector("button");
     const progress_badge = card.querySelector(".progress-badge");
@@ -531,8 +493,8 @@ function task_card_features() {
       tab_lists_update();
       // card.remove();
 
-      // card remove animation
-      // add anim-end-state classes to card
+      // Card remove animation
+      // Add anim-end-state classes to card
       card.classList.add("scale-50", "opacity-0", "transition-all", "duration-300", "pointer-events-none");
 
       // Wait for the duration (300ms) then remove from DOM
@@ -555,7 +517,6 @@ function task_card_features() {
       const btn_Id = e.currentTarget.id;
       currentEditingId = Number(btn_Id.split("-")[1]); // Update with current editing ID
 
-      //toggle_edit_task_form();
       toggle_form(edit_task_overlay, edit_taskForm);
       populate_form(currentEditingId);
     });
@@ -796,7 +757,7 @@ window.addEventListener("click", (e) => {
   }
 });
 
-// sort by date
+// Sort by date
 sort_date.addEventListener("click", () => {
   [sort_priority, sort_name].forEach((btn) => {
     btn.classList.remove("sort-active");
@@ -814,7 +775,7 @@ sort_date.addEventListener("click", () => {
   sort_date.classList.toggle("sort-active");
 });
 
-// sort by priority
+// Sort by priority
 sort_priority.addEventListener("click", () => {
   [sort_date, sort_name].forEach((btn) => {
     btn.classList.remove("sort-active");
@@ -832,7 +793,7 @@ sort_priority.addEventListener("click", () => {
   sort_priority.classList.toggle("sort-active");
 });
 
-// sort by name
+// Sort by name
 sort_name.addEventListener("click", () => {
   [sort_priority, sort_date].forEach((btn) => {
     btn.classList.remove("sort-active");
@@ -884,9 +845,8 @@ new_taskForm.addEventListener("submit", (e) => {
 });
 
 // Add New Task Form toggle
-
-toggle_new_task_form(btn_add_task);
-toggle_new_task_form(btn_mobile_add_task);
+btn_add_task.addEventListener("click", () => toggle_form(new_task_overlay, new_taskForm));
+btn_mobile_add_task.addEventListener("click", () => toggle_form(new_task_overlay, new_taskForm));
 
 // Close New Task form on button click
 [btn_new_task_cancel, btn_close_form].forEach((btn) => {
