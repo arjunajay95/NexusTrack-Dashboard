@@ -1,5 +1,7 @@
 "use strict";
 
+//==================================================================== >> INITIAL DATASET << =============================================================
+
 let tasks_list = [
   {
     task_id: 1,
@@ -99,7 +101,7 @@ let tasks_list = [
   },
 ];
 
-// ------------------------------------------------------------------element selections
+//==================================================================== >> ELEMENT SELECTIONS << =============================================================
 
 // dark / light mode selections
 const dark_mode = document.getElementById("dark-mode-toggle");
@@ -159,21 +161,23 @@ const edit_task_priority = document.getElementById("edit-task-priority");
 const edit_task_status = document.getElementById("edit-task-status");
 const edit_task_date = document.getElementById("edit-task-date");
 
-//------------------------------------------------------------------ Variable declarations
-
+//------------------------------------------------------------------ Variable Declarations ----------------------------------------------------------
+// Arrays for different task statuses
 let to_do_task_list = [];
 let in_progress_task_list = [];
 let completed_task_list = [];
 
+// Variables for task statistics
 let total_tasks, in_progress_tasks, completed_tasks;
 
+// Variables for task (card) status badge
 let status_text_color,
   status_border_color,
   status_bg_color,
   status_text,
   status_btn = "";
 
-// ---------------------------------------------------------------<<<<<<<<<<<<<<< Functions
+//==================================================================== >> FUNCTIONS << =============================================================
 // Tab list update function
 function tab_lists_update() {
   to_do_task_list = tasks_list.filter((task) => {
@@ -269,7 +273,7 @@ function stats_update() {
   completion.textContent = Math.round(completion_rate);
 }
 
-// task card status functions
+// Task (card) status functions
 function set_status_todo() {
   status_text_color = "text-text-500";
   status_bg_color = "bg-background-50";
@@ -330,7 +334,7 @@ function toggle_edit_task_form() {
   }
 }
 
-// task card generate function
+// Task card generate function
 function task_card(tasks_list, task_container) {
   task_container.innerHTML = "";
 
@@ -437,7 +441,7 @@ function task_card(tasks_list, task_container) {
   }
 }
 
-// task card btn features function
+// Task card button actions function
 function task_card_features() {
   const task_card_list = document.querySelectorAll(".task-card");
 
@@ -566,7 +570,7 @@ function task_card_features() {
   });
 }
 
-// populate task info into form function
+// Populate task info into form function - For editing tasks
 function populate_form(id) {
   const task = tasks_list.find((t) => t.task_id === id);
 
@@ -579,7 +583,7 @@ function populate_form(id) {
   edit_task_date.value = task.date;
 }
 
-// generate tasks for all tabs function
+// Filter tasks for all tabs function
 function filter_tasks() {
   task_card(tasks_list, task_container);
   tab_lists_update();
@@ -710,7 +714,7 @@ function close_form(overlay, form, message) {
   setTimeout(() => form.reset(), 1000);
 }
 
-// ------------------------------------------------------------------- Initialize
+//==================================================================== >> LOGIC & EVENT HANDLERS << =============================================================
 
 // Initialize task container - important for filtering for tabs
 filter_tasks();
@@ -750,7 +754,7 @@ user_profile.addEventListener("click", () => {
   user_profile_options.classList.toggle("hidden");
 });
 
-// ------------------------------------------------------------ Sort function
+// ------------------------------------------------------------ Sort Menu and Options + Event Handlers
 
 // Toggle sort menu with click event
 btn_sort.addEventListener("click", () => {
@@ -817,7 +821,7 @@ sort_name.addEventListener("click", () => {
   sort_name.classList.toggle("sort-active");
 });
 
-// ------------------------------------------------------------------ Add New Task
+// ------------------------------------------------------------------ Add New Task Form Event Handlers
 
 // Add New Task submission on button click or enter
 new_taskForm.addEventListener("submit", (e) => {
@@ -850,31 +854,31 @@ new_taskForm.addEventListener("submit", (e) => {
   }, 1000);
 });
 
-// ------------------------------------------------------------ Add New Task Form toggle
+// Add New Task Form toggle
 
 toggle_new_task_form(btn_add_task);
 toggle_new_task_form(btn_mobile_add_task);
 
-// Close new task form on button press
+// Close New Task form on button click
 [btn_new_task_cancel, btn_close_form].forEach((btn) => {
   btn.addEventListener("click", () => close_form(new_task_overlay, new_taskForm, success_msg));
 });
 
-// Close new task form when clicked outside (overlay)
+// Close New Task form when clicked outside (overlay)
 new_task_overlay.addEventListener("click", (e) => {
   if (e.target === new_task_overlay) {
     close_form(new_task_overlay, new_taskForm, success_msg);
   }
 });
 
-// Close new task form on "Escape" key press
+// Close New Task form on "Escape" key press
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     close_form(new_task_overlay, new_taskForm, success_msg);
   }
 });
 
-// ----------------------------------------------------------- Edit Task Form actions
+// ------------------------------------------------------------------ Edit Task Form Event Handlers
 
 // Close edit task form on button press
 [btn_edit_task_cancel, btn_close_edit_task_form].forEach((btn) => {
@@ -895,7 +899,7 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// ---------------------------------------FAQ toggles
+// ------------------------------------------------------------------ FAQ toggle Event Handlers
 
 const faq_blocks = document.querySelectorAll(".faq-block");
 
