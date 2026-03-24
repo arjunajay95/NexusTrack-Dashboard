@@ -408,7 +408,7 @@ function task_card(tasks_list, task_container) {
                   </div>
                   <div class="flex justify-between items-center border-t border-background-300 w-full pt-4 mt-4">
                     <p id="date" class="text-text-500 text-[11px]">${formatted_date}</p>
-                    <button id="btn-${task.task_id}"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-400/70 px-2 py-1 hover:bg-background-400 cursor-pointer">${status_btn}</span></button>
+                    <button id="btn-${task.task_id}"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-400/80 px-2 py-1 hover:bg-background-400 cursor-pointer">${status_btn}</span></button>
                   </div>
                 </article>
       `;
