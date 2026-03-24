@@ -374,7 +374,7 @@ function task_card(tasks_list, task_container) {
 
       task_container.innerHTML += `
                 <!-- Task card -->
-                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start bg-gradient-to-b from-background-200/50 border-t-2 hover:border-background-400 border-background-300 rounded-xl p-4 hover:shadow-md hover:scale-102 active:scale-98 transition-all duration-200 cursor-pointer scale-95 opacity-0">
+                <article id="task-${task.task_id}" class="task-card flex flex-col justify-center items-start bg-gradient-to-b from-background-200/50 to-background-400/30 border-t-2 hover:border-background-400 border-background-300 rounded-xl p-4 hover:shadow-md hover:scale-102 active:scale-98 transition-all duration-200 cursor-pointer scale-95 opacity-0">
                   <div class="flex w-full justify-between items-start">
                     <div class="flex flex-col items-start gap-2">
                       <p id="task-name" class="task-name ${status_complete_text_color} ${status_complete_text_deco} text-sm font-semibold">${task.task_name}</p>
@@ -408,7 +408,7 @@ function task_card(tasks_list, task_container) {
                   </div>
                   <div class="flex justify-between items-center border-t border-background-300 w-full pt-4 mt-4">
                     <p id="date" class="text-text-500 text-[11px]">${formatted_date}</p>
-                    <button id="btn-${task.task_id}"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-300 px-2 py-1 hover:bg-background-300 cursor-pointer">${status_btn}</span></button>
+                    <button id="btn-${task.task_id}"><span class="text-text-900 text-[11px] font-medium border rounded-lg border-background-400/70 px-2 py-1 hover:bg-background-400 cursor-pointer">${status_btn}</span></button>
                   </div>
                 </article>
       `;
