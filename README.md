@@ -65,7 +65,7 @@ NexusTrack started as a capstone project with a defined spec. The goal was to bu
 
 The color system came early. I set up four semantic palettes (text, background, primary, accent) as CSS custom properties, then inverted them for dark mode under a `.dark` class on the root element. That made theming a single toggle rather than a scattered set of overrides throughout the stylesheet.
 
-State management is intentionally simple. One source-of-truth array holds all tasks. Every action, whether adding, editing, deleting, or switching status, mutates that array and then re-renders the relevant part of the UI. It's not fancy, but it's easy to reason about and debug.
+State management is intentionally made simple. One source-of-truth array holds all tasks. Every action, whether adding, editing, deleting, or switching status, mutates that array and then re-renders the relevant part of the UI. It's not fancy, but it's easy to reason about and debug.
 
 The card animations were a small detail worth getting right. Injecting cards via `innerHTML` and then immediately applying a CSS transition doesn't work because the browser skips the initial state. Wrapping the class changes in `requestAnimationFrame` forces the browser to paint the hidden state first, giving the transition something to animate from.
 
