@@ -11,12 +11,12 @@ A task management dashboard built with vanilla HTML, Tailwind CSS, and JavaScrip
 
 ## Technologies
 
-| Technology | Role |
-|---|---|
-| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white) | Semantic structure throughout |
+| Technology                                                                                                     | Role                                                                              |
+| -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)                      | Semantic structure throughout                                                     |
 | ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white) | Utility-first styling with a fully custom design system via CSS custom properties |
-| ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black) | All interactivity, state management, and DOM manipulation, written from scratch |
-| ![Google Fonts](https://img.shields.io/badge/Google_Fonts-4285F4?style=flat&logo=google&logoColor=white) | Inter and Lexend for clean, readable typography |
+| ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)       | All interactivity, state management, and DOM manipulation, written from scratch   |
+| ![Google Fonts](https://img.shields.io/badge/Google_Fonts-4285F4?style=flat&logo=google&logoColor=white)       | Inter and Lexend for clean, readable typography                                   |
 
 > No React. No Vue. No build pipeline. Just the fundamentals, used well.
 
@@ -24,24 +24,21 @@ A task management dashboard built with vanilla HTML, Tailwind CSS, and JavaScrip
 
 ## Features
 
-### 🗂 Task Management
-- Create, edit, and delete tasks through modal forms
-- Each task card shows the name, description, priority badge, status badge, and due date
-- A status progression system moves tasks from **To Do** to **In Progress** to **Completed**, with an undo option
-- Completed tasks get a strikethrough so the visual hierarchy stays clean
-
 ### 📊 Dashboard Statistics
+
 - Four live stat cards: Total Tasks, In Progress, Completed, and Overdue
 - Overdue count automatically excludes completed tasks and is calculated against today's date
 - The Overdue card pulses 🔴 when there are active overdue tasks and goes grayscale when there aren't
 - Completion rate, last week's task count, and in-progress tasks due this week all update in real time
 
 ### 🔍 Filtering and Search
+
 - Tab-based filtering across All, To Do, In Progress, and Completed
 - Live search filters by task name or description as you type
 - Sort dropdown lets you order tasks by date, priority, or name, and toggles back to default on a second click
 
 ### 🎨 UX Details
+
 - 🌙 Full dark mode with an inverted custom color palette, toggled with a single button
 - 📱 Responsive layout: sidebar on desktop, a hamburger popover on mobile
 - ➕ Floating action buttons on mobile for adding tasks and scrolling to the top
@@ -50,12 +47,10 @@ A task management dashboard built with vanilla HTML, Tailwind CSS, and JavaScrip
 - Forms close on cancel, overlay click, or the Escape key
 - Edit and delete icons fade in on hover for desktop, and stay visible on mobile
 
-
 <div align="center">
   <img width="2505" height="1561" alt="ipad_UI_transparent" src="https://github.com/user-attachments/assets/9e1a8da0-863a-4de6-97a3-cba3ca7b45d1" />
   <sub>NexuTrack: iPad Mini User Interface (Create Task Menu)</sub>
 </div>
-
 
 <br>
 
@@ -88,17 +83,16 @@ Handling multiple overlapping event contexts (sort state, active tab, live searc
 
 <br>
 
-
 ## How It Could Be Improved
 
-| Area | What's missing |
-|---|---|
-| 💾 Persistence | Tasks live in memory and vanish on refresh. `localStorage` would be the most impactful single fix. |
-| 🆔 Task ID generation | Currently uses `tasks_list.length + 1`, which breaks after deletions. A UUID or proper counter would fix that. |
-| 🔍 Search + Sort coordination | Both work well independently, but combining them isn't fully wired up. A straightforward fix. |
-| 🖱 Drag and drop | Reordering tasks manually would be a natural addition, one step away from a full kanban view. |
-| ♿ Accessibility | Focus trapping in modals, ARIA labels on icon-only buttons, and keyboard nav through the task grid. |
-| 📅 Date validation | Nothing stops you from setting a due date in the past. A small form validation pass would tighten that up. |
+| Area                          | What's missing                                                                                                 |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| 💾 Persistence                | Tasks live in memory and vanish on refresh. `localStorage` would be the most impactful single fix.             |
+| 🆔 Task ID generation         | Currently uses `tasks_list.length + 1`, which breaks after deletions. A UUID or proper counter would fix that. |
+| 🔍 Search + Sort coordination | Both work well independently, but combining them isn't fully wired up. A straightforward fix.                  |
+| 🖱 Drag and drop              | Reordering tasks manually would be a natural addition, one step away from a full kanban view.                  |
+| ♿ Accessibility              | Focus trapping in modals, ARIA labels on icon-only buttons, and keyboard nav through the task grid.            |
+| 📅 Date validation            | Nothing stops you from setting a due date in the past. A small form validation pass would tighten that up.     |
 
 <br>
 
