@@ -24,6 +24,13 @@ A task management dashboard built with vanilla HTML, Tailwind CSS, and JavaScrip
 
 ## Features
 
+### 🗂 Task Management
+
+- Create, edit, and delete tasks through modal forms
+- Each task card shows the name, description, priority badge, status badge, and due date
+- A status progression system moves tasks from **To Do** to **In Progress** to **Completed**, with an undo option
+- Completed tasks get a strikethrough so the visual hierarchy stays clean
+
 ### 📊 Dashboard Statistics
 
 - Four live stat cards: Total Tasks, In Progress, Completed, and Overdue
