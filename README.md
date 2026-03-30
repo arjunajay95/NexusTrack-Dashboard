@@ -54,13 +54,6 @@ A task management dashboard built with vanilla HTML, Tailwind CSS, and JavaScrip
 - Forms close on cancel, overlay click, or the Escape key
 - Edit and delete icons fade in on hover for desktop, and stay visible on mobile
 
-<div align="center">
-  <img width="2505" height="1561" alt="ipad_UI_transparent" src="https://github.com/user-attachments/assets/9e1a8da0-863a-4de6-97a3-cba3ca7b45d1" />
-  <sub>NexuTrack: iPad Mini User Interface (Create Task Menu)</sub>
-</div>
-
-<br>
-
 ## The Process
 
 NexusTrack started as a capstone project with a defined spec. The goal was to build a functional task dashboard without reaching for a framework. The first decisions were structural: one HTML file, one JS file, and a Tailwind setup that runs in the browser so there's no build step to worry about.
