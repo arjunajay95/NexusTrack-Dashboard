@@ -277,6 +277,29 @@ function stats_update() {
 }
 
 // Task (card) Set-Status functions
+function set_status_todo() {
+  status_text_color = "text-text-500";
+  status_bg_color = "bg-background-50";
+  status_border_color = "border-background-400";
+  status_text = "To Do";
+  status_btn = "Mark In Progress";
+}
+
+function set_status_inprogress() {
+  status_text_color = "text-blue-500";
+  status_bg_color = "bg-blue-500/10";
+  status_border_color = "border-blue-200/50";
+  status_text = "In Progress";
+  status_btn = "Mark Completed";
+}
+
+function set_status_completed() {
+  status_text_color = "text-green-500";
+  status_bg_color = "bg-green-500/10";
+  status_border_color = "border-green-200/50";
+  status_text = "Completed";
+  status_btn = "Undo";
+}
 
 // Toggle form upon button click function
 function toggle_form(overlay, form) {
