@@ -83,22 +83,6 @@ let tasks_list = [
     task_status: "in-progress",
     date: "2026-03-19",
   },
-  {
-    task_id: 11,
-    task_name: "Onboard new developer",
-    task_desc: "Pair programming session + codebase walkthrough.",
-    task_priority: "low",
-    task_status: "to-do",
-    date: "2026-03-20",
-  },
-  {
-    task_id: 12,
-    task_name: "Write API documentation",
-    task_desc: "Document all REST endpoints with examples.",
-    task_priority: "low",
-    task_status: "to-do",
-    date: "2026-03-28",
-  },
 ];
 
 //==================================================================== >> ELEMENT SELECTIONS << =============================================================
