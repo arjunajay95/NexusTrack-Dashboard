@@ -79,6 +79,10 @@ This project was a good reminder that constraints produce clarity. Not having a 
 
 I got a much better feel for CSS custom properties used as a real theming system, not just variables sprinkled here and there. Pairing them with Tailwind's `@theme` directive to create semantic color tokens that work across both light and dark modes was something I hadn't done at this scale before.
 
+The `requestAnimationFrame` trick for CSS entrance animations was a genuine discovery. It's one of those things that seems obvious in hindsight but isn't written up anywhere obvious.
+
+Handling multiple overlapping event contexts (sort state, active tab, live search all needing to stay in sync) taught me to think about state flow more deliberately. A few early bugs came from filters and sorts not knowing about each other, and fixing them required stepping back and mapping the data flow properly.
+
 <div align="center">
   <img width="4000" height="2382" alt="Mobile UI transparent" src="https://github.com/user-attachments/assets/9def52fe-3619-47cb-887d-3ad5ab695c54" />
   <sub>NexuTrack: Mobile User Interface (Edit Task Menu)</sub>
