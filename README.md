@@ -116,14 +116,6 @@ Then open `index.html` in your browser. That's it.
 
 If you want a local dev server with live reload:
 
-```bash
-# Using VS Code
-# Install the "Live Server" extension, right-click index.html, select "Open with Live Server"
-
-# Or with npx
-npx serve .
-```
-
 > Tailwind loads via CDN so it works out of the box without any config or compilation.
 
 ---
