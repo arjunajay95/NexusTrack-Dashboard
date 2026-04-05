@@ -2,6 +2,10 @@
 
 A task management dashboard built with vanilla HTML, Tailwind CSS, and JavaScript. No frameworks, no build tools, just clean code doing real work. Try it live 👉 [NexusTrack Demo](https://arjunajay95.github.io/NexusTrack-Dashboard/)
 
+<div align="center">
+  <img width="5000" height="2869" alt="desktop_UI_transparent" src="https://github.com/user-attachments/assets/8c1d8269-aa8e-41d9-9b7f-79190d333f40" />
+  <sub>NexuTrack: Desktop User Interface</sub>
+</div>
 
 <br>
 
@@ -46,6 +50,13 @@ A task management dashboard built with vanilla HTML, Tailwind CSS, and JavaScrip
 - Forms close on cancel, overlay click, or the Escape key
 - Edit and delete icons fade in on hover for desktop, and stay visible on mobile
 
+
+<div align="center">
+  <img width="2505" height="1561" alt="ipad_UI_transparent" src="https://github.com/user-attachments/assets/9e1a8da0-863a-4de6-97a3-cba3ca7b45d1" />
+  <sub>NexuTrack: iPad Mini User Interface (Create Task Menu)</sub>
+</div>
+
+
 <br>
 
 ## The Process
@@ -54,7 +65,7 @@ NexusTrack started as a capstone project with a defined spec. The goal was to bu
 
 The color system came early. I set up four semantic palettes (text, background, primary, accent) as CSS custom properties, then inverted them for dark mode under a `.dark` class on the root element. That made theming a single toggle rather than a scattered set of overrides throughout the stylesheet.
 
-State management is intentionally simple. One source-of-truth array holds all tasks. Every action, whether adding, editing, deleting, or switching status, mutates that array and then re-renders the relevant part of the UI. It's not fancy, but it's easy to reason about and debug.
+State management is intentionally made simple. One source-of-truth array holds all tasks. Every action, whether adding, editing, deleting, or switching status, mutates that array and then re-renders the relevant part of the UI. It's not fancy, but it's easy to reason about and debug.
 
 The card animations were a small detail worth getting right. Injecting cards via `innerHTML` and then immediately applying a CSS transition doesn't work because the browser skips the initial state. Wrapping the class changes in `requestAnimationFrame` forces the browser to paint the hidden state first, giving the transition something to animate from.
 
@@ -70,7 +81,13 @@ The `requestAnimationFrame` trick for CSS entrance animations was a genuine disc
 
 Handling multiple overlapping event contexts (sort state, active tab, live search all needing to stay in sync) taught me to think about state flow more deliberately. A few early bugs came from filters and sorts not knowing about each other, and fixing them required stepping back and mapping the data flow properly.
 
+<div align="center">
+  <img width="4000" height="2382" alt="Mobile UI transparent" src="https://github.com/user-attachments/assets/9def52fe-3619-47cb-887d-3ad5ab695c54" />
+  <sub>NexuTrack: Mobile User Interface (Edit Task Menu)</sub>
+</div>
+
 <br>
+
 
 ## How It Could Be Improved
 
